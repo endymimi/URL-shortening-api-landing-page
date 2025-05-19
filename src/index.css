@@ -30,12 +30,12 @@
 
 .shortener {
 background-color: hsl(257, 27%, 26%);
-height: 17.188rem;
+height: 13.188rem;
 border-radius: 8px;
 
 }
 .shortener img{
-  height: 13.188rem;
+  height: 8.188rem;
   @apply w-full rounded-lg ;
    
 }

@@ -33,7 +33,7 @@ const Footer = () => {
        </article>
 
        <article>
-         <h3 className='text-white text-lg font-bold tracking-wide' >Company</h3>
+         <h3 className='text-white text-lg font-bold tracking-wide  hover:text-cyan-500 cursor-pointer' >Company</h3>
          <ul>
           <li><button className='text-sm text-[var(--GrayishViolet)] hover:text-cyan-500 cursor-pointer mt-1'>About</button></li>
           <li><button className='text-sm text-[var(--GrayishViolet)] hover:text-cyan-500 cursor-pointer mt-1'>Our Team</button></li>
@@ -43,11 +43,11 @@ const Footer = () => {
        </article>
 
        <article>
-        <ul className='flex items-center'>
-          <li className=' hover:bg-cyan-500 cursor-pointer'><img src={facebook} alt="" /></li>
-          <li className='ml-4 hover:bg-cyan-500 cursor-pointer'><img src={twitter} alt="" /></li>
-          <li className='ml-4 hover:bg-cyan-500 cursor-pointer'><img src={pinterest} alt="" /></li>
-          <li className='mx-5 hover:bg-cyan-500 cursor-pointer'><img src={instagram} alt="" /></li>
+        <ul className='flex items-center '>
+          <li className=' hover:bg-cyan-500 cursor-pointer w-50 h-7'><img src={facebook} alt="" /></li>
+          <li className='ml-4 hover:bg-cyan-500 cursor-pointer w-50 h-7'><img src={twitter} alt="" /></li>
+          <li className='ml-4 hover:bg-cyan-500 cursor-pointer w-50 h-7 '><img src={pinterest} alt="" /></li>
+          <li className='mx-5 hover:bg-cyan-500 cursor-pointer w-50 h-7 '><img src={instagram} alt="" /></li>
         </ul>
        </article>
       </div>

@@ -66,7 +66,7 @@ const Header = () => {
    </div>
 
    <button onClick={()=> setIsOpen(!isOpen)} className="uppercase text-sm tracking-wide md:hidden">
-     {isOpen ? <img src={menuicon} alt="" />  : "Menu"}
+     <img src={menuicon} alt="" /> 
    </button>
 </div>
    

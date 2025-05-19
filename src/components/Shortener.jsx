@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import shortmobile from "../assets/bg-shorten-mobile4.svg";
 import shortdesktop from "../assets/bg-boost-desktop1.svg";
 
-const backgroundImage = window.innerWidth >= 768 ? shortdesktop: shortmobile;
 
-const Shortener = () => {
+ const Shortener = () => {
   const [url, setUrl] = useState("");
   const [shortenedUrl, setShortenedUrl] = useState("");
   const [history, setHistory] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Load saved URLs from localStorage
+  
   useEffect(() => {
     const savedUrls = localStorage.getItem("shortenedUrls");
     if (savedUrls) {
@@ -20,7 +19,8 @@ const Shortener = () => {
   }, []);
 
   const handleShortenUrl = async () => {
-    if (!url) {
+    const cleanedUrl = url.trim();
+    if (!cleanedUrl) {
       setError("Please add a URL link!");
       return;
     }
@@ -28,9 +28,6 @@ const Shortener = () => {
     try {
       setError("");
       setLoading(true);
-      
-      console.log("Fetching API with URL:", url);
-
      
       const apiUrl = `https://tinyurl.com/api-create.php?url=${encodeURIComponent(
         url
@@ -44,21 +41,17 @@ const Shortener = () => {
       });
 
       
-      console.log("Raw Response:", response);
-
-      if (!response.ok) {
+     if (!response.ok) {
         throw new Error("Failed to fetch the shortened URL");
       }
 
       const data = await response.text(); 
 
       
-      console.log("API Response:", data);
-
-      if (data) {
+       if (data) {
         const newShortenedUrl = data;
 
-        // Update state and save to localStorage
+        
         const updatedHistory = [
           ...history,
           { original: url, shortened: newShortenedUrl },
@@ -68,7 +61,7 @@ const Shortener = () => {
         localStorage.setItem("shortenedUrls", JSON.stringify(updatedHistory));
       } else {
         setError("Failed to shorten the URL. Please try again.");
-        console.error("API Error: No data returned");
+        
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
@@ -77,86 +70,106 @@ const Shortener = () => {
       setLoading(false);
     }
   };
+  const handleClearHistory = () => {
+    setHistory([]); 
+    localStorage.removeItem("shortenedUrls"); 
+  };
 
   const handleCopyToClipboard = (urlToCopy, index) => {
     navigator.clipboard.writeText(urlToCopy);
 
-   
+    
     setHistory((prevHistory) =>
       prevHistory.map((item, i) =>
         i === index ? { ...item, copied: true } : { ...item, copied: false }
       )
     );
 
-   
-    setTimeout(() => {
-      setHistory((prevHistory) =>
-        prevHistory.map((item) => ({ ...item, copied: false }))
-      );
-    }, 1000);
+    
+    
   };
 
   return (
-    <div className="bg-[#F0F1F6] px-4 md:px-20 lg:px-[130px] pt-5">
-      {/* Input and Button Section with Background Image */}
-      <div style={{ backgroundImage: `url(${backgroundImage})` }}
-  className="bg-[#3A3053] bg-cover bg-center p-6 rounded-lg shadow-md max-w-full overflow-hidden md:py-10">
-        <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-          <input
-            type="text"
-            placeholder="Shorten a link here..."
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            className="flex-1 bg-white px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2BD1D0]  w-full"
-          />
-          <button
-            onClick={handleShortenUrl}
-            className="bg-[#2BD1D0] text-white px-10 py-3 text-lg font-bold rounded-lg hover:bg-[#9DE1E2] transition duration-300  w-full md:w-auto"
-          >
-            {loading ? "Shortening..." : "Shorten It!"}
-          </button>
-        </div>
-
-        {/* Display error message */}
-        {error && <p className="text-[var(--Red)] mt-4">{error}</p>}
+    <>
+    <section className='max-width'>
+       <div
+    className="relative  shortener w-full h-80 md:h-64 bg-cover bg-center rounded-lg overflow-hidden"
+    style={{
+      backgroundImage: `url(${window.innerWidth >= 768 ? shortdesktop : shortmobile})`,
+    }}
+  >
+    <div className="absolute inset-0 bg-opacity-50 flex flex-col items-center justify-center px-4 md:px-8">
+      <div className="flex flex-col md:flex-row items-center w-full md:space-x-4">
+        <input
+          type="text"
+          placeholder="Shorten a link here..."
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          className="flex-1 bg-white px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2BD1D0] w-full"
+        />
+        <button
+          onClick={handleShortenUrl}
+          className="bg-[var(--Cyan)] text-white px-10 py-3 text-lg font-bold rounded-lg hover:bg-[#9DE1E2] transition duration-300 w-full md:w-auto mt-4 md:mt-0"
+        >
+          {loading ? "Shortening..." : "Shorten It!"}
+        </button>
+        
       </div>
-
-      {/* Display shortened URLs */}
-      <ul className="mt-6 space-y-4">
-        {history.map((item, index) => (
-          <li
-            key={index}
-            className="bg-white p-4 rounded-lg flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 shadow-md"
-          >
-            <span className="text-[#3E3D41] text-lg font-medium break-all border-b md:border-none pb-2 md:pb-0 w-full">
-              {item.original}
-            </span>
-            <div className="flex flex-col md:flex-row items-left space-y-4 md:space-y-0 md:space-x-4 w-full">
-              <a
-                href={item.shortened}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--Cyan)] pt-3 md:ml-auto font-medium break-all"
-              >
-                {item.shortened}
-              </a>
-              <button
-                onClick={() => handleCopyToClipboard(item.shortened, index)}
-                className={`${
-                  item.copied
-                    ? "bg-[#3A3053] text-white"
-                    : "bg-[var(--Cyan)] text-white"
-                } px-8 py-3 rounded-lg hover:opacity-90 transition duration-300 md:ml-auto text-xl font-bold hover:bg-[var(--VeryDarkViolet)] cursor-pointer`}
-              >
-                {item.copied ? "Copied!" : "Copy"}
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+       {error && <p className="text-[var(--Red)] mt-4">{error}</p>}
     </div>
-  );
-};
+    
+  </div>
+          
+      {/* Display shortened URLs */}
+      {history.length > 0 && (
+        <div className="mt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold text-gray-700">Link History</h2>
+            <button
+              onClick={handleClearHistory}
+              className="bg-[var(--Cyan)] text-white px-4 py-2 rounded-lg hover:bg-[var(--VeryDarkViolet)] cursor-pointer transition duration-300 text-sm md:text-base"
+            >
+              Clear History
+            </button>
+            </div>
+            <ul className="space-y-4">
+            {history.map((item, index) => (
+              <li
+                key={index}
+                className="bg-white p-4 rounded-lg flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 shadow-md"
+              >
+                <span className="text-[#3E3D41] text-lg font-medium break-all border-b md:border-none pb-2 md:pb-0 w-full">
+                  {item.original}
+                </span>
+                <div className="flex flex-col md:flex-row items-left space-y-4 md:space-y-0 md:space-x-4 w-full">
+                  <a
+                    href={item.shortened}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#2BD1D0] font-bold break-all"
+                  >
+                    {item.shortened}
+                  </a>
+             
+              <button
+                    onClick={() => handleCopyToClipboard(item.shortened, index)}
+                    className={`${
+                      item.copied
+                        ? "bg-[#3A3053] text-white"
+                        : "bg-[#2BD1D0] text-white"
+                    } px-8 py-3 rounded-lg hover:opacity-90 transition duration-300 md:ml-auto text-xl cursor-pointer font-bold hover:bg-[var(VeryDarkViolet)]`}
+                  >
+                    {item.copied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+              </li>
+           ))}
+          </ul>
+        </div>
+         )}
+    </section>
+    </>
+  )
+}
 
-export default Shortener;
-
+export default Shortener
