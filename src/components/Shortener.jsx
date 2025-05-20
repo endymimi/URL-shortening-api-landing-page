@@ -109,7 +109,7 @@ import shortdesktop from "../assets/bg-boost-desktop1.svg";
         />
         <button
           onClick={handleShortenUrl}
-          className="bg-[var(--Cyan)] text-white px-10 py-3 text-lg font-bold rounded-lg hover:bg-[#9DE1E2] transition duration-300 w-full md:w-auto mt-4 md:mt-0"
+          className="bg-[var(--Cyan)] text-white px-10 py-6 text-lg font-bold rounded-lg hover:bg-[#9DE1E2] transition duration-300 w-full md:w-auto mt-4 md:mt-0"
         >
           {loading ? "Shortening..." : "Shorten It!"}
         </button>
@@ -124,21 +124,15 @@ import shortdesktop from "../assets/bg-boost-desktop1.svg";
       {history.length > 0 && (
         <div className="mt-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-gray-700">Link History</h2>
-            <button
-              onClick={handleClearHistory}
-              className="bg-[var(--Cyan)] text-white px-4 py-2 rounded-lg hover:bg-[var(--VeryDarkViolet)] cursor-pointer transition duration-300 text-sm md:text-base"
-            >
-              Clear History
-            </button>
+            
             </div>
-            <ul className="space-y-4">
+            <ul className="space-y-4 ">
             {history.map((item, index) => (
               <li
                 key={index}
-                className="bg-white p-4 rounded-lg flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 shadow-md"
+                className="bg-white p-4 rounded-lg flex flex-col py-3 md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 shadow-md"
               >
-                <span className="text-[#3E3D41] text-lg font-medium break-all border-b md:border-none pb-2 md:pb-0 w-full">
+                <span className="text-[#3E3D41] text-lg  font-medium break-all border-b md:border-none pb-2 md:pb-0 w-full">
                   {item.original}
                 </span>
                 <div className="flex flex-col md:flex-row items-left space-y-4 md:space-y-0 md:space-x-4 w-full">
@@ -146,7 +140,7 @@ import shortdesktop from "../assets/bg-boost-desktop1.svg";
                     href={item.shortened}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#2BD1D0] font-bold break-all"
+                    className="text-[#2BD1D0] font-bold break-all "
                   >
                     {item.shortened}
                   </a>
@@ -157,14 +151,25 @@ import shortdesktop from "../assets/bg-boost-desktop1.svg";
                       item.copied
                         ? "bg-[#3A3053] text-white"
                         : "bg-[#2BD1D0] text-white"
-                    } px-8 py-3 rounded-lg hover:opacity-90 transition duration-300 md:ml-auto text-xl cursor-pointer font-bold hover:bg-[var(VeryDarkViolet)]`}
+                    } px-8 py-3 rounded-lg hover:opacity-90 transition  duration-300 md:ml-auto text-xl cursor-pointer font-bold hover:bg-[var(VeryDarkViolet)]`}
                   >
                     {item.copied ? "Copied!" : "Copy"}
                   </button>
+                  
                 </div>
+                
               </li>
+              
            ))}
           </ul>
+
+          <h2 className="text-lg font-bold text-gray-700"></h2>
+            <button
+              onClick={handleClearHistory}
+              className="bg-[var(--Cyan)] text-white px-4 py-2 my-6 rounded-lg hover:bg-[var(--VeryDarkViolet)] cursor-pointer transition duration-300 text-sm md:text-base"
+            >
+              Clear History
+            </button>
         </div>
          )}
     </section>
@@ -173,3 +178,8 @@ import shortdesktop from "../assets/bg-boost-desktop1.svg";
 }
 
 export default Shortener
+
+
+
+
+
